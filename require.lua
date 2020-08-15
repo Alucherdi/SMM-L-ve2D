@@ -1,0 +1,13 @@
+--all require
+Game = require("game")
+cam = require("camera")
+initt = require("introinit")
+menuInit = require("menu")
+require("sounds_loader..smw")
+require("player_spr")
+require("editor_spr")
+music_smw = require("smwmusic")
+bg_select = require("bg")
+players = require("player")
+lovepad = require("lovepad")
+edit = require("editor")
