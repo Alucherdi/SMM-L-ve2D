@@ -1,38 +1,43 @@
-player = {}
-player.__index = player
+Player = {}
+Player.__index = Player
 
-function player:new(x,y)
-    self = setmetatable({},player)
+function Player:new(x, y)
+    self = setmetatable({},Player)
     self.x = x
     self.y = y
+    self.rotation = 0
+    self.scale = {
+      x = 1.482,
+      y = 1.482
+    }
     return self
 end
 
-playerX = 50
-playerY = 50
-playerRotate = 0
-playerScaleX = 1.482
-playerScaleY = 1.482
+function Player:update(dt)
+  if lovepad:isDown("Up") then
+    self.y = self.y - 200 * dt
+  elseif lovepad:isDown("Down") then
+    self.y = self.y + 200 * dt
+  end
 
-function player:draw()
---mario
---small
-love.graphics.draw(smw_mario_small_stand, playerX, playerY, playerRotate, playerScaleX, playerScaleY)
-
+  if lovepad:isDown("Left") then
+    self.x = self.x - 200 * dt
+  elseif lovepad:isDown("Right") then
+    self.x = self.x + 200 * dt
+  end
 end
 
-function player:update(dt)
-if lovepad:isDown("Up") then
-playerY = playerY-200*dt
-elseif lovepad:isDown("Down") then
-playerY = playerY+200*dt
-end
-if lovepad:isDown("Left") then
-playerX = playerX-200*dt
-elseif lovepad:isDown("Right") then
-playerX = playerX+200*dt
+function Player:draw()
+  --mario
+  --small
+  love.graphics.draw(
+    smw_mario_small_stand,
+    self.x,
+    self.y,
+    self.rotation,
+    self.scale.x,
+    self.scale.y
+  )
 end
 
-
-end
-return player
+return Player

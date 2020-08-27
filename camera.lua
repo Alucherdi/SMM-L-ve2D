@@ -17,3 +17,22 @@ end
 function camera:unset()
   love.graphics.pop()
 end
+
+function camera:follow(target)
+  if target.x >= love.graphics.getWidth() / 2 then
+    camera.x = target.x - love.graphics.getWidth() / 2
+  end
+
+  if target.y >= love.graphics.getHeight() / 2 then
+    camera.y = target.y - love.graphics.getHeight() / 2
+  end
+
+  if camera.y >= maxCameraY then
+    camera.y = maxCameraY
+  end
+
+  if camera.x >= maxCameraX then
+    camera.x = maxCameraX
+  end
+
+end

@@ -4,94 +4,106 @@ push = require("push")
 lovepad:setGamePad()
 
 --push
-local gameWidth, gameHeight = 854, 480--854, 480--384,216
+local gameWidth, gameHeight     = 854, 480--854, 480--384,216
 local windowWidth, windowHeight = love.window.getDesktopDimensions()
-push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = true, pixelperfect = true}) 
+
+push:setupScreen(
+  gameWidth,
+  gameHeight,
+  windowWidth,
+  windowHeight,
+  {
+    fullscreen = false,
+    pixelperfect = true
+  }
+)
 --pop xd
+function love.load()
+  player = Player:new(50, 50)
+end
 
 function love.draw()
-push:start()
-camera:set()
-if gamestate == "init_menu" or gamestate == "lvl_editor" then
-bg_select:draw()
-end
+  push:start()
+  camera:set()
 
-players:draw()
+  if gamestate == "init_menu" or gamestate == "lvl_editor" then
+    bg_select:draw()
+  end
 
-camera:unset()
+  player:draw()
 
-if gamestate == "init_menu" then
-menuInit:draw()
-end
+  camera:unset()
 
-if gamestate == "lvl_editor" then
-edit:draw()
+  if gamestate == "init_menu" then
+    menuInit:draw()
+  end
+
+  if gamestate == "lvl_editor" then
+    edit:draw()
+
     if love.mouse.isDown(1) and editor_state == 1 then
-    love.graphics.draw(cursor,love.mouse.getX()-8,love.mouse.getY()-8,0,0.33)
+      love.graphics.draw(
+      cursor,
+      love.mouse.getX() -8,
+      love.mouse.getY() -8,
+      0,
+      0.33
+    )
     end
-end
+  end
 
-lovepad:draw()
+  lovepad:draw()
 
-if gamestate == "init" then
-initt:draw()
-end
+  if gamestate == "init" then
+    initt:draw()
+  end
 
-love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 2, 2)
+  love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 2, 2)
 
-push:finish()
+  push:finish()
 end
 
 function love.update(dt)
-lovepad:update()
+  lovepad:update()
 
-if gamestate == "init" then
-initt:update(dt)
-end
-if gamestate == "init_menu" then
-menuInit:update(dt)
-end
-if gamestate == "init_menu" or gamestate == "lvl_editor" then
-bg_select:update(dt)
-end
+  if gamestate == "init" then
+    initt:update(dt)
+  end
 
-players:update(dt)
---la cámara seguirá al jugador
-if playerX >= love.graphics.getWidth()/2 then
-camera.x = playerX - love.graphics.getWidth()/2
-end
-if playerY >= love.graphics.getHeight()/2 then
-camera.y = playerY - love.graphics.getHeight()/2
-end
+  if gamestate == "init_menu" then
+    menuInit:update(dt)
+  end
 
-if camera.y >= maxCameraY then
-camera.y = maxCameraY
-end
-if camera.x >= maxCameraX then
-camera.x = maxCameraX
-end
+  if gamestate == "init_menu" or gamestate == "lvl_editor" then
+    bg_select:update(dt)
+  end
 
-if gamestate == "lvl_editor" then
-edit:update(dt)
-end
+  player:update(dt)
 
-music_smw:update(dt)
+  --la cámara seguirá al jugador
+  camera:follow(player)
+
+  if gamestate == "lvl_editor" then
+    edit:update(dt)
+  end
+
+  music_smw:update(dt)
 
 end
 
 function love.mousepressed(x,y,button)
-if gamestate == "init_menu" then
-menuInit:mousepressed(x,y,button)
-end
+  if gamestate == "init_menu" then
+    menuInit:mousepressed(x, y, button)
+  end
 
-if gamestate == "lvl_editor" then
-edit:mousepressed(x,y,button)
-end
+  if gamestate == "lvl_editor" then
+    edit:mousepressed(x, y, button)
+  end
 
 end
 
 function love.mousereleased(x,y,button)
-if gamestate == "lvl_editor" then
-edit:mousereleased(x,y,button)
-end
+  if gamestate == "lvl_editor" then
+    edit:mousereleased(x, y, button)
+  end
 end
